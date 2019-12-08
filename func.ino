@@ -26,37 +26,57 @@ volatile int escala_atual = 0;
 */
 
 /* pentatonica
-1  C [140 - 150]
-2  D [160 - 168]
-3  E [380 - 390]
-4  F [430 - 440]
-5  G [250 - 260]
-6  A [105 - 112]
-7  B [116 - 124]
+
+A2 [105 - 112]
+C3 [116 - 124]
+D3 [140 - 150]
+E3 [160 - 168]
+G4 [380 - 390]
+
+
+E -5-8-------
+A -----5-7---
+D ---------5-
+G -----------
+
 */
 
+/* DO
+
+C3 [116 - 124] **
+D3 [140 - 150] **
+E3 [160 - 168] **
+F4 [335 - 355] -- PEGAR O DA GUITARRA
+G4 [380 - 390] **
+A4 [435 - 455] -- PEGAR O DA GUITARRA
+B3 [240 - 250] -- PEGAR O DA GUITARRA
+
+E ---------------
+A -3-5-7---------
+D -------3-5-7---
+G -------------4-
+
+*/
+
+
 int descobre_nota (float nota) {
-  float aux = nota;
+
   Serial.println(nota);
 
-  // vai dividindo por dois até chegar na frequencia base
-  // while (aux >= 32) {
-  //   aux -= 14.65;
-  // }
-  Serial.println(aux);
-
- if ((aux <= 112)&&(aux >= 105)) {
+ if (((nota <= 112)&&(nota >= 105))||((nota <= 455)&&(nota >= 435))) {
     return 6; // A
-  } else if ((aux <= 124)&&(aux >= 116)) {
+  } else if ((nota <= 250)&&(nota >= 240)) {
     return 7; // B
-  } else if ((aux <= 150)&&(aux >= 140)){
+  } else if ((nota <= 116)&&(nota >= 124)){
     return 1; // C
-  } else if ((aux <= 168)&&(aux >= 160)) {
+  } else if ((nota <= 150)&&(nota >= 140)) {
     return 2; // D
-  } else if ((aux <= 440)&&(aux >= 430)) {
+  } else if ((nota <= 355)&&(nota >= 335)) {
     return 4; // F
-  } else if ((aux <= 260)&&(aux >= 250)) {
-    return 5; // G  
+  } else if ((nota <= 390)&&(nota >=380)) {
+    return 5; // G
+  } else if ((nota <= 168)&&(nota >= 160)) {
+      return 3; // E
   } else {
     return 666; // nota não identificada
   }
