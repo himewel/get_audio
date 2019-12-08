@@ -1,18 +1,18 @@
-
 // escalas escritas em ordem
 // escala de dó
-int do[7] = {1,2,3,4,5,6,7};
+int c[7] = {1,2,3,4,5,6,7};
+
 // Pentatonica la menor
 // A - C - D - E - G
 int pent_la_menor[5] = {6,1,2,3,5};
 
 // posição em que a nota se encontra na guitarra
-volatil int posicao_nota = 0;
+volatile int posicao_nota = 0;
 
 // escala
 // 0 -> escala de do
 // 1 -> pentatonica de la menor
-volatil int escala_atual = 0;
+volatile int escala_atual = 0;
 
 //descobre a nota
 /*
@@ -25,32 +25,40 @@ volatil int escala_atual = 0;
 7  B [29.3 - 32]
 */
 
-void setup() {
-  Serial.begin(9600);
-}
+/*
+1  C [885 - 17.35]
+2  D [17.36 - 19.5]
+3  E [82.407 - 21.2]
+4  F [21.3 - 23.2]
+5  G [23.3 - 26]
+6  A [105 - 104]
+7  B [29.3 - 32]
+*/
 
-int descobre_nota(float nota) {
+int descobre_nota (float nota) {
   float aux = nota;
+  Serial.println(nota);
 
   // vai dividindo por dois até chegar na frequencia base
-  while (aux >= 32) {
-    aux = aux/2;
-  }
+  // while (aux >= 32) {
+  //   aux -= 14.65;
+  // }
+  Serial.println(aux);
 
-  if (aux <= 17.35) {
-    return 1; // do
-  } else if (aux <= 19.5) {
-    return 2; //re
-  } else if (aux <= 21.2) {
+ if (aux <= 82.47) {
     return 3; // mi
-  } else if (aux <= 23.2) {
+  } else if (aux <= 92.499) {
     return 4; // fa
-  } else if (aux <= 26) {
+  } else if (aux <= 103.83) {
     return 5; // sol
-  } else if (aux <= 29.2) {
+  } else if (aux <= 116.54) {
     return 6; // la
-  } else {
+  } else if (aux <= 123.47) {
     return 7; // si
+  } else if (aux <= 130.81) {
+    return 1; // do
+  } else {
+    return 2; //re
   }
 
   return 0;
@@ -70,7 +78,7 @@ bool verificador (int nota) {
       aux_pos = aux_pos - 7;
     }
 
-    if (do[aux_pos] == nota) {
+    if (c[aux_pos] == nota) {
       return true;
     }
 
@@ -87,7 +95,7 @@ bool verificador (int nota) {
     return false;
   }
 
-  return false;
+  return 0;
 }
 
 float captura_frequencia() {
@@ -110,12 +118,14 @@ float frequencia(){
   float frequencia_final = 0;
   float aux = 0;
 
-  for (i = 0; i < 100; i++) {
-    // Captura a frequencia
-    aux = captura_frequencia();
-    //tem que pegar a frequencia pico
-    if (aux > frequencia_final) {
-      frequencia_final = aux;
-    }
-  }
+//  for (i = 0; i < 50; i++) {
+//    // Captura a frequencia
+//    aux = captura_frequencia();
+//    //tem que pegar a frequencia pico
+//    if (aux > frequencia_final) {
+//      frequencia_final = aux;
+//    }
+//  }
+
+  return frequencia_final;
 }
