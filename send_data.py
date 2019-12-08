@@ -41,7 +41,7 @@ if (__name__ == '__main__'):
             thefreq = (which+x1)*RATE/CHUNK
 
             print(thefreq)
-            mySerial.write(str(thefreq)+"\n" if (thefreq > 80) else str(80)+"\n")
+            mySerial.write(str(thefreq)+"\n")
         except KeyboardInterrupt:
             stream.close()
             audio.terminate()
