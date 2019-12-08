@@ -130,3 +130,20 @@ float captura_frequencia() {
 
   return frequencia;
 }
+
+void teste_de_nota(){
+
+  float freq = 0;
+  int nota = -1;
+
+  freq = captura_frequencia();
+  nota = descobre_nota(freq);
+
+  Serial.println(nota);
+
+  // enquanto a nota n'ao mudar fica esperando
+  while(freq == captura_frequencia());
+
+  // quando a nota mudar verfica a nova nota
+  teste_de_nota();
+}
