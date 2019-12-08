@@ -51,4 +51,5 @@ if (__name__ == '__main__'):
         except:
             stream.close()
             audio.terminate()
+            mySerial.close()
             exit()
