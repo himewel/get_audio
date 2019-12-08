@@ -130,22 +130,3 @@ float captura_frequencia() {
 
   return frequencia;
 }
-
-// captura a frequencia
-float frequencia(){
-  // defini tempo de amostragem
-  int i = 0;
-  float frequencia_final = 0;
-  float aux = 0;
-
-//  for (i = 0; i < 50; i++) {
-//    // Captura a frequencia
-//    aux = captura_frequencia();
-//    //tem que pegar a frequencia pico
-//    if (aux > frequencia_final) {
-//      frequencia_final = aux;
-//    }
-//  }
-
-  return frequencia_final;
-}
