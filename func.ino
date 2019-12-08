@@ -25,14 +25,14 @@ volatile int escala_atual = 0;
 7  B [29.3 - 32]
 */
 
-/*
-1  C [885 - 17.35]
-2  D [17.36 - 19.5]
-3  E [82.407 - 21.2]
-4  F [21.3 - 23.2]
-5  G [23.3 - 26]
-6  A [105 - 104]
-7  B [29.3 - 32]
+/* pentatonica
+1  C [140 - 150]
+2  D [160 - 168]
+3  E [380 - 390]
+4  F [430 - 440]
+5  G [250 - 260]
+6  A [105 - 112]
+7  B [116 - 124]
 */
 
 int descobre_nota (float nota) {
@@ -45,20 +45,20 @@ int descobre_nota (float nota) {
   // }
   Serial.println(aux);
 
- if (aux <= 82.47) {
-    return 3; // mi
-  } else if (aux <= 92.499) {
-    return 4; // fa
-  } else if (aux <= 103.83) {
-    return 5; // sol
-  } else if (aux <= 116.54) {
-    return 6; // la
-  } else if (aux <= 123.47) {
-    return 7; // si
-  } else if (aux <= 130.81) {
-    return 1; // do
+ if ((aux <= 112)&&(aux >= 105)) {
+    return 6; // A
+  } else if ((aux <= 124)&&(aux >= 116)) {
+    return 7; // B
+  } else if ((aux <= 150)&&(aux >= 140)){
+    return 1; // C
+  } else if ((aux <= 168)&&(aux >= 160)) {
+    return 2; // D
+  } else if ((aux <= 440)&&(aux >= 430)) {
+    return 4; // F
+  } else if ((aux <= 260)&&(aux >= 250)) {
+    return 5; // G  
   } else {
-    return 2; //re
+    return 666; // nota não identificada
   }
 
   return 0;
