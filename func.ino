@@ -99,20 +99,20 @@ bool verificador (int nota) {
     }
 
     if (c[aux_pos] == nota) {
-      return true;
+      return 1;
     }
 
-    return false;
+    return 0;
   } else if (escala_atual == 2) {
     while(aux_pos >= 5){
       aux_pos = aux_pos - 5;
     }
 
     if (pent_la_menor[aux_pos] == nota) {
-      return true;
+      return 1;
     }
 
-    return false;
+    return 0;
   }
 
   return 0;
@@ -146,4 +146,29 @@ void teste_de_nota(){
 
   // quando a nota mudar verfica a nova nota
   teste_de_nota();
+}
+
+void praticador(){
+
+  //primeiro captura a nota
+  float freq = 0;
+  int nota = -1;
+
+  freq = captura_frequencia();
+  nota = descobre_nota(freq);
+
+  if(verificador (nota)){
+    //esta certo
+
+    // enquanto a nota n'ao mudar fica esperando
+    while(freq == captura_frequencia());
+    // vai para proxima nota da escala
+    posicao_nota ++;
+  }else{
+    // esta errado
+
+    // enquanto a nota n'ao mudar fica esperando
+    while(freq == captura_frequencia());
+  }
+  praticador();
 }
