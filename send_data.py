@@ -1,6 +1,7 @@
 import pyaudio
 import serial
 import numpy as np
+import time
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -15,7 +16,8 @@ def createStreamer():
 
 def createSerialPort():
     mySerial = serial.Serial('/dev/ttyACM0', 9600)
-    #mySerial.open()
+    if (mySerial.is_open == False):
+        mySerial.open()
     return mySerial
 
 def pitch(data):
@@ -44,8 +46,9 @@ if (__name__ == '__main__'):
 
             print(np.min(buffer))
             mySerial.write(str(np.min(buffer))+"\n")
+            time.sleep(0.1)
 
         except:
             stream.close()
             audio.terminate()
-            mySerial.close()
+            exit()
