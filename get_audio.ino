@@ -6,12 +6,10 @@ void setup() {
 }
 
 void loop() {
-  freq = captura_frequencia();
-  nota = descobre_nota(freq);
 
-  Serial.println(nota);
+  // testa a nota tocada
+  teste_de_nota();
 
-//  if (verificador(freq) == 1) {
-//    Serial.println(nota);
-//  }
+  // testa escala
+  //praticador();
 }
