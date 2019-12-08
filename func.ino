@@ -14,21 +14,10 @@ volatile int posicao_nota = 0;
 // 1 -> pentatonica de la menor
 volatile int escala_atual = 0;
 
-//descobre a nota
-/*
-1  C [15.35 - 17.35]
-2  D [17.36 - 19.5]
-3  E [19.6 - 21.2]
-4  F [21.3 - 23.2]
-5  G [23.3 - 26]
-6  A [26.1 - 29.2]
-7  B [29.3 - 32]
-*/
-
 /* pentatonica
 
 A2 [105 - 112]
-C3 [116 - 124]
+C3 [116 - 135]
 D3 [140 - 150]
 E3 [160 - 168]
 G4 [380 - 390]
@@ -61,24 +50,22 @@ G -------------4-
 
 int descobre_nota (float nota) {
 
-  Serial.println(nota);
+  //Serial.println(nota);
 
- if (((nota <= 112)&&(nota >= 105))||((nota <= 455)&&(nota >= 435))) {
+ if (((nota <= 112)&&(nota >= 105))||((nota >= 210)&&(nota <= 220))) {
     return 6; // A
-  } else if ((nota <= 250)&&(nota >= 240)) {
+  } else if ((nota <= 250)&&(nota >= 240)||((nota >= 112)&&(nota <= 115))) {
     return 7; // B
-  } else if ((nota <= 116)&&(nota >= 124)){
+  } else if ((nota >= 116)&&(nota <= 135)){
     return 1; // C
   } else if ((nota <= 150)&&(nota >= 140)) {
     return 2; // D
-  } else if ((nota <= 355)&&(nota >= 335)) {
+  } else if ((nota >= 170)&&(nota <= 180)) {
     return 4; // F
-  } else if ((nota <= 390)&&(nota >=380)) {
+  } else if ((nota >= 182)&&(nota <= 195)) {
     return 5; // G
   } else if ((nota <= 168)&&(nota >= 160)) {
-      return 3; // E
-  } else {
-    return 666; // nota não identificada
+    return 3; // E
   }
 
   return 0;
@@ -90,32 +77,52 @@ bool verificador (int nota) {
   int aux_pos = posicao_nota;
 
   // escalas
-  // do = 1
+  // do = 0
   // pentatonica la = 2
-  if (escala_atual == 1) {
-    // normaliza a posicao
-    while (aux_pos >= 7) {
+  if (escala_atual == 0) {
+    while(aux_pos >= 7){
       aux_pos = aux_pos - 7;
     }
 
+    // normaliza a posicao
     if (c[aux_pos] == nota) {
-      return 1;
+      Serial.println("\nCorreto! ");
+      Serial.print("Esperado: ");
+      Serial.print(c[aux_pos]);
+      Serial.print(" Encontrado: ");
+      Serial.println(nota);
+      return true;
     }
+    Serial.println("\nErrado! ");
+    Serial.print("Esperado: ");
+    Serial.print(c[aux_pos]);
+    Serial.print(" Encontrado: ");
+    Serial.println(nota);
+    return false;
 
-    return 0;
   } else if (escala_atual == 2) {
     while(aux_pos >= 5){
       aux_pos = aux_pos - 5;
     }
 
     if (pent_la_menor[aux_pos] == nota) {
-      return 1;
+      Serial.println("\nCorreto! ");
+      Serial.print("Esperado: ");
+      Serial.print(c[aux_pos]);
+      Serial.print(" Encontrado: ");
+      Serial.println(nota);
+      return true;
     }
 
-    return 0;
+    Serial.println("\nErrado! ");
+    Serial.print("Esperado: ");
+    Serial.print(c[aux_pos]);
+    Serial.print(" Encontrado: ");
+    Serial.println(nota);
+    return false;
   }
 
-  return 0;
+  return false;
 }
 
 float captura_frequencia() {
@@ -157,18 +164,15 @@ void praticador(){
   freq = captura_frequencia();
   nota = descobre_nota(freq);
 
-  if(verificador (nota)){
-    //esta certo
-
+  if (verificador(nota) && nota != 0) {
+    // esta certo
     // enquanto a nota n'ao mudar fica esperando
     while(freq == captura_frequencia());
     // vai para proxima nota da escala
     posicao_nota ++;
-  }else{
+  } else {
     // esta errado
-
     // enquanto a nota n'ao mudar fica esperando
     while(freq == captura_frequencia());
   }
-  praticador();
 }

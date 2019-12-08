@@ -6,10 +6,9 @@ void setup() {
 }
 
 void loop() {
-
   // testa a nota tocada
-  teste_de_nota();
+  //teste_de_nota();
 
   // testa escala
-  //praticador();
+  praticador();
 }
