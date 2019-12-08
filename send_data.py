@@ -1,49 +1,51 @@
 import pyaudio
 import serial
 import numpy as np
-import time
-from scipy import fft, arange
 
-FORMAT = pyaudio.paFloat32
+FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-CHUNK = 1024
-RECORD_SECONDS = 10
-window = np.blackman(CHUNK)
+CHUNK = 2**15
 
 def createStreamer():
     audio = pyaudio.PyAudio()
-    stream = audio.open(format=FORMAT, channels=CHANNELS,rate=RATE, input=True)
+    stream = audio.open(format=FORMAT, channels=CHANNELS,rate=RATE, input=True,frames_per_buffer=CHUNK)
 
     return audio, stream
 
 def createSerialPort():
-    mySerial = serial.Serial('/dev/ttyACM1', 9600)
+    mySerial = serial.Serial('/dev/ttyACM0', 9600)
     #mySerial.open()
     return mySerial
+
+def pitch(data):
+    data = np.fromstring(data,dtype=np.int16)
+    data = data * np.hanning(len(data)) # smooth the FFT by windowing data
+    fft = abs(np.fft.fft(data).real)
+    fft = fft[:int(len(fft)/2)] # keep only first half
+    freq = np.fft.fftfreq(CHUNK,1.0/RATE)
+    freq = freq[:int(len(freq)/2)] # keep only first half
+    freqPeak = freq[np.where(fft==np.max(fft))[0][0]]+1
+    return freqPeak
 
 if (__name__ == '__main__'):
     audio, stream = createStreamer()
     mySerial = createSerialPort()
+    buffer = []
 
     while True:
         try:
             data = stream.read(CHUNK)
-            indata = np.array(np.fromstring(data,'Float32'))*window
-            # Take the fft and square each value
-            fftData = abs(np.fft.rfft(indata))**2
-            # find the maximum
-            which = fftData[1:].argmax() + 1
-            # use quadratic interpolation around the max
-            y0,y1,y2 = np.log(fftData[which-1:which+2:])
-            x1 = (y2 - y0) * .5 / (2 * y1 - y2 - y0)
-            # find the frequency and output it
-            thefreq = (which+x1)*RATE/CHUNK
+            freq = pitch(data)
 
-            print(thefreq)
-            mySerial.write(str(thefreq)+"\n")
-        except KeyboardInterrupt:
+            buffer.append(freq)
+            if (len(buffer) > 5):
+                buffer.pop(0)
+
+            print(np.min(buffer))
+            mySerial.write(str(np.min(buffer))+"\n")
+
+        except:
             stream.close()
             audio.terminate()
             mySerial.close()
-            raise
