@@ -15,7 +15,7 @@ def createStreamer():
     return audio, stream
 
 def createSerialPort():
-    mySerial = serial.Serial('/dev/ttyACM0', 9600)
+    mySerial = serial.Serial('/dev/ttyUSB1', 9600)
     if (mySerial.is_open == False):
         mySerial.open()
     return mySerial
@@ -44,7 +44,7 @@ if (__name__ == '__main__'):
             if (len(buffer) > 5):
                 buffer.pop(0)
 
-            print(np.min(buffer))
+            # print(np.min(buffer))
             mySerial.write(str(np.min(buffer))+"\n")
             time.sleep(0.1)
 
