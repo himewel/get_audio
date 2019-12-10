@@ -52,19 +52,19 @@ int descobre_nota (float nota) {
 
   //Serial.println(nota);
 
- if (((nota <= 112)&&(nota >= 105))||((nota >= 210)&&(nota <= 220))) {
+ if (((nota <= 112)&&(nota >= 105))||((nota >= 218)&&(nota <= 225))||((nota >= 435)&&(nota <= 440))) {
     return 6; // A
   } else if ((nota <= 250)&&(nota >= 240)||((nota >= 112)&&(nota <= 115))) {
     return 7; // B
   } else if ((nota >= 116)&&(nota <= 135)){
     return 1; // C
-  } else if ((nota <= 150)&&(nota >= 140)) {
+  } else if ((nota <= 150)&&(nota >= 140)||((nota >= 289)&&(nota <= 295))) {
     return 2; // D
   } else if ((nota >= 170)&&(nota <= 180)) {
     return 4; // F
-  } else if ((nota >= 182)&&(nota <= 195)) {
+  } else if ((nota >= 190)&&(nota <= 200)||((nota >= 345)&&(nota <= 350))) {
     return 5; // G
-  } else if ((nota <= 168)&&(nota >= 160)) {
+  } else if ((nota <= 168)&&(nota >= 160)||((nota >= 320)&&(nota <= 330))) {
     return 3; // E
   }
 
@@ -100,7 +100,7 @@ bool verificador (int nota) {
     Serial.println(nota);
     return false;
 
-  } else if (escala_atual == 2) {
+  } else if (escala_atual == 1) {
     while(aux_pos >= 5){
       aux_pos = aux_pos - 5;
     }
@@ -108,7 +108,7 @@ bool verificador (int nota) {
     if (pent_la_menor[aux_pos] == nota) {
       Serial.println("\nCorreto! ");
       Serial.print("Esperado: ");
-      Serial.print(c[aux_pos]);
+      Serial.print(pent_la_menor[aux_pos]);
       Serial.print(" Encontrado: ");
       Serial.println(nota);
       return true;
@@ -116,7 +116,7 @@ bool verificador (int nota) {
 
     Serial.println("\nErrado! ");
     Serial.print("Esperado: ");
-    Serial.print(c[aux_pos]);
+    Serial.print(pent_la_menor[aux_pos]);
     Serial.print(" Encontrado: ");
     Serial.println(nota);
     return false;
@@ -151,8 +151,6 @@ void teste_de_nota(){
   // enquanto a nota n'ao mudar fica esperando
   while(freq == captura_frequencia());
 
-  // quando a nota mudar verfica a nova nota
-  teste_de_nota();
 }
 
 void praticador(){
