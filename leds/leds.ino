@@ -112,19 +112,19 @@ void loop(){
 
     if(bit0 == 0 && bit1 == 0 && bit2== 0){
       posicao_nota = 0;
-    } else if(bit0 == 1023 && bit1 == 0 && bit2 == 0){
+    } else if(bit0 >= 900 && bit1 == 0 && bit2 == 0){
       posicao_nota = 1;
-    } else if(bit0 == 0 && bit1 == 1023 && bit2 == 0){
+    } else if(bit0 == 0 && bit1 >= 900 && bit2 == 0){
       posicao_nota = 2;
-    } else if(bit0 == 1023 && bit1 == 1023 && bit2 == 0){
+    } else if(bit0 >= 900 && bit1 >= 900 && bit2 == 0){
       posicao_nota = 3;
-    } else if(bit0 == 0 && bit1 == 0 && bit2 == 1023){
+    } else if(bit0 == 0 && bit1 == 0 && bit2 >= 900){
       posicao_nota = 4;
-    } else if(bit0 == 1023 && bit1 == 0 && bit2 == 1023){
+    } else if(bit0 >= 900 && bit1 == 0 && bit2 >= 900){
       posicao_nota = 5;
-    } else if(bit0 == 0 && bit1 == 1023 && bit2 == 1023){
+    } else if(bit0 == 0 && bit1 >= 900 && bit2 >= 900){
       posicao_nota = 6;
-    } else if(bit0 == 1023 && bit1 == 1023 && bit2 == 1023){
+    } else if(bit0 >= 900 && bit1 >= 900 && bit2 >= 900){
       posicao_nota = 7;
     }
 
