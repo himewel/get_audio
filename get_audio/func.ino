@@ -1,19 +1,3 @@
-// escalas escritas em ordem
-// escala de dó
-int c[7] = {1,2,3,4,5,6,7};
-
-// Pentatonica la menor
-// A - C - D - E - G
-int pent_la_menor[5] = {6,1,2,3,5};
-
-// posição em que a nota se encontra na guitarra
-volatile int posicao_nota = 0;
-
-// escala
-// 0 -> escala de do
-// 1 -> pentatonica de la menor
-volatile int escala_atual = 0;
-
 /* pentatonica
 
 A2 [105 - 112]
@@ -43,16 +27,55 @@ B3 [240 - 250] -- PEGAR O DA GUITARRA
 E ---------------
 A -3-5-7---------
 D -------3-5-7---
-G -------------4-
+G -------------4- */
 
-*/
-
+void codifica_nota (int nota) {
+  switch (nota) {
+    case 0:
+      analogWrite(A2, 0);
+      analogWrite(A1, 0);
+      analogWrite(A0, 0);
+      break;
+    case 1:
+      analogWrite(A2, 0);
+      analogWrite(A1, 0);
+      analogWrite(A0, 255);
+      break;
+    case 2:
+      analogWrite(A2, 0);
+      analogWrite(A1, 255);
+      analogWrite(A0, 0);
+      break;
+    case 3:
+      analogWrite(A2, 0);
+      analogWrite(A1, 255);
+      analogWrite(A0, 255);
+      break;
+    case 4:
+      analogWrite(A2, 255);
+      analogWrite(A1, 0);
+      analogWrite(A0, 0);
+      break;
+    case 5:
+      analogWrite(A2, 255);
+      analogWrite(A1, 0);
+      analogWrite(A0, 255);
+      break;
+    case 6:
+      analogWrite(A2, 255);
+      analogWrite(A1, 255);
+      analogWrite(A0, 0);
+      break;
+    case 7:
+      analogWrite(A2, 255);
+      analogWrite(A1, 255);
+      analogWrite(A0, 255);
+      break;
+  }
+}
 
 int descobre_nota (float nota) {
-
-  //Serial.println(nota);
-
- if (((nota <= 112)&&(nota >= 105))||((nota >= 218)&&(nota <= 225))||((nota >= 435)&&(nota <= 440))) {
+  if (((nota <= 112)&&(nota >= 105))||((nota >= 218)&&(nota <= 225))||((nota >= 435)&&(nota <= 440))) {
     return 6; // A
   } else if ((nota <= 250)&&(nota >= 240)||((nota >= 112)&&(nota <= 115))) {
     return 7; // B
@@ -82,43 +105,24 @@ bool verificador (int nota) {
   if (escala_atual == 0) {
     while(aux_pos >= 7){
       aux_pos = aux_pos - 7;
+      posicao_nota = aux_pos;
     }
 
     // normaliza a posicao
     if (c[aux_pos] == nota) {
-      Serial.println("\nCorreto! ");
-      Serial.print("Esperado: ");
-      Serial.print(c[aux_pos]);
-      Serial.print(" Encontrado: ");
-      Serial.println(nota);
       return true;
     }
-    Serial.println("\nErrado! ");
-    Serial.print("Esperado: ");
-    Serial.print(c[aux_pos]);
-    Serial.print(" Encontrado: ");
-    Serial.println(nota);
     return false;
 
   } else if (escala_atual == 1) {
     while(aux_pos >= 5){
       aux_pos = aux_pos - 5;
+      posicao_nota = aux_pos;
     }
 
     if (pent_la_menor[aux_pos] == nota) {
-      Serial.println("\nCorreto! ");
-      Serial.print("Esperado: ");
-      Serial.print(pent_la_menor[aux_pos]);
-      Serial.print(" Encontrado: ");
-      Serial.println(nota);
       return true;
     }
-
-    Serial.println("\nErrado! ");
-    Serial.print("Esperado: ");
-    Serial.print(pent_la_menor[aux_pos]);
-    Serial.print(" Encontrado: ");
-    Serial.println(nota);
     return false;
   }
 
@@ -138,7 +142,7 @@ float captura_frequencia() {
   return frequencia;
 }
 
-void teste_de_nota(){
+void teste_de_nota() {
 
   float freq = 0;
   int nota = -1;
@@ -147,14 +151,13 @@ void teste_de_nota(){
   nota = descobre_nota(freq);
 
   Serial.println(nota);
+  codifica_nota(nota);
 
   // enquanto a nota n'ao mudar fica esperando
   while(freq == captura_frequencia());
-
 }
 
 void praticador(){
-
   //primeiro captura a nota
   float freq = 0;
   int nota = -1;
@@ -162,15 +165,34 @@ void praticador(){
   freq = captura_frequencia();
   nota = descobre_nota(freq);
 
+  Serial.println(nota);
+  codifica_nota(posicao_nota);
+
   if (verificador(nota) && nota != 0) {
     // esta certo
     // enquanto a nota n'ao mudar fica esperando
-    while(freq == captura_frequencia());
+    //while(freq == captura_frequencia());
     // vai para proxima nota da escala
     posicao_nota ++;
   } else {
     // esta errado
     // enquanto a nota n'ao mudar fica esperando
-    while(freq == captura_frequencia());
+    //while(freq == captura_frequencia());
   }
+}
+
+void le_botao(){
+  int interrup = analogRead(A4);
+
+  if(interrup > 900){
+    if(escala_atual == 0)
+      posicao_nota = 0;
+
+    escala_atual = 1;
+  }else{
+    if(escala_atual == 1)
+      posicao_nota = 0;
+    escala_atual = 0;
+  }
+
 }
